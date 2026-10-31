@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>WHISPR by Princess</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Font: Plus Jakarta Sans & Outfits -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            midnight: '#07030d',
+            darkCard: '#120a21',
+            darkBorder: '#291444',
+            neonPurple: '#b026ff',
+            lavender: '#d8b4fe',
+            softPink: '#f472b6',
+            glowPink: '#ff2a8d'
+          },
+          fontFamily: {
+            outfit: ['Outfit', 'sans-serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbars & Midnight Styling */
+    body {
+      background-color: #05020a;
+      color: #f3e8ff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .glass-card {
+      background: linear-gradient(135deg, rgba(25, 12, 43, 0.7) 0%, rgba(12, 5, 23, 0.85) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(176, 38, 255, 0.18);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .glass-card-glow {
+      background: linear-gradient(135deg, rgba(35, 16, 61, 0.8) 0%, rgba(15, 6, 29, 0.9) 100%);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(244, 114, 182, 0.3);
+      box-shadow: 0 0 20px rgba(176, 38, 255, 0.25);
+    }
+
+    .neon-btn {
+      background: linear-gradient(135deg, #b026ff 0%, #ff2a8d 100%);
+      box-shadow: 0 0 15px rgba(176, 38, 255, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .neon-btn:active {
+      transform: scale(0.96);
+      box-shadow: 0 0 25px rgba(255, 42, 141, 0.8);
+    }
+
+    .neon-border-glow {
+      box-shadow: 0 0 10px rgba(176, 38, 255, 0.4);
+    }
+
+    /* Hide scrollbar for clean horizontal scrolling */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .tab-active {
+      color: #f472b6;
+      text-shadow: 0 0 10px rgba(244, 114, 182, 0.6);
+    }
+
+    /* Crown Float Animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(2deg); }
+    }
+    .floating-crown {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    /* Pulse Glow */
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.6)); }
+      50% { filter: drop-shadow(0 0 18px rgba(244, 114, 182, 0.9)); }
+    }
+    .crown-glow {
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    /* Animated Progress Bars for Polls */
+    .poll-bar-fill {
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+  </style>
+</head>
+<body class="pb-24 max-w-md mx-auto min-h-screen relative border-x border-purple-900/30">
+
+  <!-- TOP APP HEADER -->
+  <header class="sticky top-0 z-40 bg-midnight/90 backdrop-blur-md px-4 py-3 border-b border-purple-900/40 flex items-center justify-between">
+    <div class="flex items-center gap-2.5">
+      <!-- Crown Logo SVG -->
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-900 to-fuchsia-900 p-1.5 flex items-center justify-center border border-purple-500/40 shadow-lg crown-glow">
+        <svg class="w-full h-full text-pink-400 floating-crown" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="font-outfit text-xl font-extrabold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-purple-300 via-pink-300 to-lavender">
+          WHISPR
+        </h1>
+        <p class="text-[9px] text-purple-400 font-medium -mt-1 tracking-widest uppercase">By Princess</p>
+      </div>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div class="flex items-center gap-3">
+      <button onclick="switchTab('notifications')" class="relative p-2 rounded-full bg-purple-950/60 border border-purple-800/50 text-purple-300 hover:text-white transition">
+        <i class="fa-solid fa-bell text-sm"></i>
+        <span id="notif-badge" class="absolute -top-1 -right-1 w-4 h-4 bg-pink-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center shadow-lg">3</span>
+      </button>
+      <button onclick="openModal('guidelines-modal')" class="p-2 rounded-full bg-purple-950/60 border border-purple-800/50 text-pink-400 hover:text-pink-300 transition">
+        <i class="fa-solid fa-shield-halved text-sm"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- SEARCH BAR (Global) -->
+  <div class="px-4 pt-3 pb-1">
+    <div class="relative flex items-center">
+      <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-purple-400 text-xs"></i>
+      <input type="text" id="global-search" onkeyup="handleSearch()" placeholder="Search whispers, polls, #topics..." 
+        class="w-full bg-darkCard/80 border border-purple-900/60 rounded-full pl-9 pr-4 py-2 text-xs text-purple-100 placeholder-purple-400/60 focus:outline-none focus:border-pink-500/80 transition shadow-inner">
+    </div>
+  </div>
+
+  <!-- MAIN VIEWS CONTAINER -->
+  <main id="app-viewport" class="px-4 pt-3">
+
+    <!-- 1. HOME VIEW -->
+    <section id="view-home" class="view-panel space-y-4">
+      <!-- Welcome Hero Banner -->
+      <div class="glass-card-glow rounded-2xl p-4 relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-neonPurple/20 rounded-full blur-2xl pointer-events-none"></div>
+        <div class="flex items-start justify-between">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-pink-500/20 text-pink-300 border border-pink-500/30 mb-1">
+              ✨ Safe Space
+            </span>
+            <h2 class="text-lg font-outfit font-bold text-white leading-tight">"Your thoughts. Your space. Your voice."</h2>
+            <p class="text-xs text-purple-300/80 mt-1">Speak freely, vote anonymously, and connect safely.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Trending Tags -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-semibold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-fire text-pink-400"></i> Trending Now
+          </span>
+          <button onclick="switchTab('trending')" class="text-[11px] text-pink-400 hover:underline">View All</button>
+        </div>
+        <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button onclick="filterByTag('LateNightThoughts')" class="flex-shrink-0 px-3 py-1.5 rounded-full bg-purple-950/80 border border-purple-700/50 text-xs text-purple-200 hover:border-pink-500 transition">
+            #LateNightThoughts
+          </button>
+          <button onclick="filterByTag('CampusSecrets')" class="flex-shrink-0 px-3 py-1.5 rounded-full bg-purple-950/80 border border-purple-700/50 text-xs text-purple-200 hover:border-pink-500 transition">
+            #CampusSecrets
+          </button>
+          <button onclick="filterByTag('CrushConfessions')" class="flex-shrink-0 px-3 py-1.5 rounded-full bg-purple-950/80 border border-purple-700/50 text-xs text-purple-200 hover:border-pink-500 transition">
+            #CrushConfessions
+          </button>
+          <button onclick="filterByTag('LifeAdvice')" class="flex-shrink-0 px-3 py-1.5 rounded-full bg-purple-950/80 border border-purple-700/50 text-xs text-purple-200 hover:border-pink-500 transition">
+            #LifeAdvice
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Poll Highlight -->
+      <div id="home-featured-poll"></div>
+
+      <!-- Community Feed Header -->
+      <div class="flex items-center justify-between pt-2">
+        <h3 class="text-sm font-bold text-purple-100 flex items-center gap-2">
+          <i class="fa-solid fa-stream text-neonPurple"></i> Recent Community Whisprs
+        </h3>
+        <span class="text-[11px] text-purple-400" id="feed-count">3 Posts</span>
+      </div>
+
+      <!-- Feed Container -->
+      <div id="home-feed-container" class="space-y-3.5"></div>
+    </section>
+
+    <!-- 2. DAILY POLLS VIEW -->
+    <section id="view-polls" class="view-panel hidden space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-outfit font-bold text-white">Daily Community Polls</h2>
+          <p class="text-xs text-purple-300">Vote anonymously & see instant real-time community opinions.</p>
+        </div>
+        <button onclick="switchTab('create')" class="px-3 py-1.5 rounded-xl neon-btn text-xs font-semibold text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-plus"></i> New Poll
+        </button>
+      </div>
+
+      <!-- Poll List Container -->
+      <div id="polls-list-container" class="space-y-4"></div>
+    </section>
+
+    <!-- 3. CONFESSIONS VIEW (ANONYMOUS & MODERATED) -->
+    <section id="view-confessions" class="view-panel hidden space-y-4">
+      <div class="glass-card-glow rounded-2xl p-4 border border-pink-500/30">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-solid fa-user-secret text-pink-400 text-lg"></i>
+          <h2 class="text-base font-outfit font-bold text-white">Anonymous Confession Box</h2>
+        </div>
+        <p class="text-xs text-purple-200 leading-relaxed mb-3">
+          Share your deepest thoughts 100% anonymously. All submissions undergo AI & automated safety check before appearing publicly.
+        </p>
+
+        <!-- Confession Input Form -->
+        <form onsubmit="submitConfession(event)" class="space-y-2.5">
+          <textarea id="confession-text" rows="3" required placeholder="Type your secret confession here... (No names, bullying, or threats allowed)" 
+            class="w-full bg-midnight/90 border border-purple-800/80 rounded-xl p-3 text-xs text-purple-100 placeholder-purple-400/50 focus:outline-none focus:border-pink-500 transition resize-none"></textarea>
+          
+          <div class="flex items-center justify-between pt-1">
+            <span class="text-[10px] text-purple-400 flex items-center gap-1">
+              <i class="fa-solid fa-lock text-pink-400"></i> Identity Hidden
+            </span>
+            <button type="submit" class="px-4 py-2 rounded-xl neon-btn text-xs font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Submit Confession
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Pending Moderation Toast Notice -->
+      <div id="moderation-toast" class="hidden glass-card rounded-xl p-3 border border-yellow-500/40 text-yellow-200 text-xs flex items-center gap-2.5 animate-pulse">
+        <i class="fa-solid fa-hourglass-half text-yellow-400 text-base"></i>
+        <div>
+          <p class="font-semibold text-yellow-300">Submitted for Moderation</p>
+          <p class="text-[10px] text-yellow-200/80">Your confession is queued for quick review to ensure safety guidelines.</p>
+        </div>
+      </div>
+
+      <!-- Approved Public Confessions Feed -->
+      <div>
+        <h3 class="text-xs font-semibold text-purple-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+          <i class="fa-solid fa-masks-theater text-lavender"></i> Approved Public Confessions
+        </h3>
+        <div id="confessions-feed" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 4. TRENDING / EXPLORE VIEW -->
+    <section id="view-trending" class="view-panel hidden space-y-4">
+      <div>
+        <h2 class="text-lg font-outfit font-bold text-white">Explore & Hot Discussions</h2>
+        <p class="text-xs text-purple-300">Discover top performing topics and community conversations.</p>
+      </div>
+
+      <!-- Hot Topics List -->
+      <div class="glass-card rounded-2xl p-3.5 space-y-3">
+        <h3 class="text-xs font-bold text-pink-300 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-chart-line"></i> Top Trending Topics
+        </h3>
+        <div class="space-y-2">
+          <div onclick="filterByTag('LateNightThoughts')" class="flex items-center justify-between p-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 cursor-pointer transition">
+            <div>
+              <p class="text-xs font-bold text-purple-100">#LateNightThoughts</p>
+              <p class="text-[10px] text-purple-400">142 active discussions</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-purple-500"></i>
+          </div>
+          <div onclick="filterByTag('CrushConfessions')" class="flex items-center justify-between p-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 cursor-pointer transition">
+            <div>
+              <p class="text-xs font-bold text-purple-100">#CrushConfessions</p>
+              <p class="text-[10px] text-purple-400">98 active discussions</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-purple-500"></i>
+          </div>
+          <div onclick="filterByTag('CampusSecrets')" class="flex items-center justify-between p-2 rounded-xl bg-purple-950/40 hover:bg-purple-900/40 cursor-pointer transition">
+            <div>
+              <p class="text-xs font-bold text-purple-100">#CampusSecrets</p>
+              <p class="text-[10px] text-purple-400">76 active discussions</p>
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-purple-500"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explore Search Feed Results -->
+      <div>
+        <h3 class="text-xs font-semibold text-purple-300 uppercase tracking-wider mb-2">Explore Stream</h3>
+        <div id="explore-feed-container" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 5. CREATE POST / POLL VIEW -->
+    <section id="view-create" class="view-panel hidden space-y-4">
+      <div>
+        <h2 class="text-lg font-outfit font-bold text-white">Create New Whispr</h2>
+        <p class="text-xs text-purple-300">Share a thought or create an interactive community poll.</p>
+      </div>
+
+      <!-- Post Type Toggle -->
+      <div class="flex rounded-xl bg-darkCard border border-purple-800/60 p-1">
+        <button type="button" id="tab-btn-text" onclick="setCreateType('text')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-neonPurple text-white transition">
+          <i class="fa-solid fa-pen"></i> Thought Post
+        </button>
+        <button type="button" id="tab-btn-poll" onclick="setCreateType('poll')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-purple-300 hover:text-white transition">
+          <i class="fa-solid fa-square-poll-vertical"></i> Poll
+        </button>
+      </div>
+
+      <!-- Create Form -->
+      <form onsubmit="handleCreatePost(event)" class="glass-card rounded-2xl p-4 space-y-3">
+        <!-- User Info Header -->
+        <div class="flex items-center gap-2.5 mb-1">
+          <img id="create-avatar-preview" src="https://api.dicebear.com/7.x/bottts/svg?seed=PrincessUser" class="w-8 h-8 rounded-full border border-pink-400" alt="Avatar">
+          <div>
+            <p id="create-username-preview" class="text-xs font-bold text-purple-100">Princess_Guest</p>
+            <p class="text-[9px] text-purple-400">Public Posting</p>
+          </div>
+        </div>
+
+        <!-- Post Content -->
+        <div>
+          <textarea id="create-content" rows="3" required placeholder="What's on your mind? Add tags like #LateNightThoughts..." 
+            class="w-full bg-midnight/80 border border-purple-800/80 rounded-xl p-3 text-xs text-purple-100 placeholder-purple-400/50 focus:outline-none focus:border-pink-500 transition resize-none"></textarea>
+        </div>
+
+        <!-- Emojis Bar -->
+        <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
+          <span class="text-[10px] text-purple-400 mr-1">Quick Emoji:</span>
+          <button type="button" onclick="insertEmoji('✨')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">✨</button>
+          <button type="button" onclick="insertEmoji('💜')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">💜</button>
+          <button type="button" onclick="insertEmoji('🔥')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">🔥</button>
+          <button type="button" onclick="insertEmoji('🤫')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">🤫</button>
+          <button type="button" onclick="insertEmoji('👑')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">👑</button>
+          <button type="button" onclick="insertEmoji('👀')" class="px-2 py-0.5 rounded bg-purple-900/40 text-xs hover:bg-purple-800/60">👀</button>
+        </div>
+
+        <!-- Poll Specific Fields (Hidden by Default) -->
+        <div id="poll-fields" class="hidden space-y-2 pt-2 border-t border-purple-900/50">
+          <label class="text-[11px] font-semibold text-pink-300">Poll Options</label>
+          <input type="text" id="poll-opt-1" placeholder="Option 1" class="w-full bg-midnight/80 border border-purple-800/80 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+          <input type="text" id="poll-opt-2" placeholder="Option 2" class="w-full bg-midnight/80 border border-purple-800/80 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+          <input type="text" id="poll-opt-3" placeholder="Option 3 (Optional)" class="w-full bg-midnight/80 border border-purple-800/80 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+        </div>
+
+        <!-- Action Button -->
+        <button type="submit" class="w-full py-2.5 rounded-xl neon-btn text-xs font-bold text-white shadow-lg mt-2 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Publish Whispr
+        </button>
+      </form>
+    </section>
+
+    <!-- 6. USER PROFILE VIEW -->
+    <section id="view-profile" class="view-panel hidden space-y-4">
+      <!-- Profile Header Card -->
+      <div class="glass-card-glow rounded-2xl p-4 text-center relative overflow-hidden">
+        <div class="absolute top-2 right-2">
+          <button onclick="openModal('edit-profile-modal')" class="p-2 rounded-full bg-purple-900/50 text-purple-300 hover:text-white transition text-xs">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </button>
+        </div>
+
+        <div class="relative inline-block mb-2">
+          <img id="profile-avatar-display" src="https://api.dicebear.com/7.x/bottts/svg?seed=PrincessUser" class="w-20 h-20 rounded-full border-2 border-pink-400 mx-auto shadow-lg" alt="User Avatar">
+          <span class="absolute bottom-0 right-0 bg-neonPurple text-white p-1 rounded-full text-[10px] crown-glow">
+            <i class="fa-solid fa-crown text-[10px]"></i>
+          </span>
+        </div>
+
+        <h2 id="profile-name-display" class="text-base font-outfit font-bold text-white">Princess_Guest</h2>
+        <p id="profile-bio-display" class="text-xs text-purple-300 mt-0.5">Vibing in my own aesthetic realm ✨</p>
+
+        <!-- Stats Counters -->
+        <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-purple-800/50 text-center">
+          <div class="bg-purple-950/40 rounded-xl p-2 border border-purple-900/40">
+            <span id="stat-posts-count" class="block font-outfit font-bold text-sm text-pink-400">1</span>
+            <span class="text-[10px] text-purple-300 uppercase">My Posts</span>
+          </div>
+          <div class="bg-purple-950/40 rounded-xl p-2 border border-purple-900/40">
+            <span id="stat-votes-count" class="block font-outfit font-bold text-sm text-lavender">4</span>
+            <span class="text-[10px] text-purple-300 uppercase">Votes Cast</span>
+          </div>
+          <div class="bg-purple-950/40 rounded-xl p-2 border border-purple-900/40">
+            <span id="stat-likes-count" class="block font-outfit font-bold text-sm text-neonPurple">12</span>
+            <span class="text-[10px] text-purple-300 uppercase">Likes Given</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy Protection Assurance Box -->
+      <div class="glass-card rounded-xl p-3 border border-purple-800/60 text-xs space-y-1">
+        <div class="flex items-center gap-2 text-pink-400 font-bold">
+          <i class="fa-solid fa-user-shield"></i> Safe & Private Guarantee
+        </div>
+        <p class="text-[11px] text-purple-300/80 leading-relaxed">
+          WHISPR never asks for or collects your real name, phone number, address, or physical location. Your privacy is protected by default.
+        </p>
+      </div>
+
+      <!-- User Activity Tab Header -->
+      <div class="space-y-2">
+        <h3 class="text-xs font-semibold text-purple-300 uppercase tracking-wider flex items-center gap-1.5">
+          <i class="fa-solid fa-clock-rotate-left"></i> My Recent Activity
+        </h3>
+        <div id="user-activity-container" class="space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 7. NOTIFICATIONS VIEW -->
+    <section id="view-notifications" class="view-panel hidden space-y-3">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-outfit font-bold text-white">Notifications</h2>
+          <p class="text-xs text-purple-300">Stay updated on interactions with your posts.</p>
+        </div>
+        <button onclick="clearNotifications()" class="text-xs text-pink-400 hover:underline">Mark all read</button>
+      </div>
+
+      <div id="notif-list-container" class="space-y-2.5"></div>
+    </section>
+  </main>
+
+  <!-- FLOATING BOTTOM NAVIGATION BAR -->
+  <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[92%] max-w-md bg-midnight/90 backdrop-blur-xl border border-purple-800/60 rounded-full px-3 py-2 z-50 shadow-2xl flex items-center justify-between">
+    <button onclick="switchTab('home')" id="nav-home" class="nav-btn tab-active flex flex-col items-center justify-center w-12 py-1 text-purple-400 transition">
+      <i class="fa-solid fa-house text-base"></i>
+      <span class="text-[9px] font-medium mt-0.5">Home</span>
+    </button>
+    <button onclick="switchTab('polls')" id="nav-polls" class="nav-btn flex flex-col items-center justify-center w-12 py-1 text-purple-400 transition">
+      <i class="fa-solid fa-chart-simple text-base"></i>
+      <span class="text-[9px] font-medium mt-0.5">Polls</span>
+    </button>
+    
+    <!-- Central Create Floating Glow Button -->
+    <button onclick="switchTab('create')" id="nav-create" class="flex flex-col items-center justify-center -mt-5">
+      <div class="w-12 h-12 rounded-full neon-btn border-2 border-pink-300 flex items-center justify-center text-white text-lg shadow-xl crown-glow">
+        <i class="fa-solid fa-plus"></i>
+      </div>
+    </button>
+
+    <button onclick="switchTab('confessions')" id="nav-confessions" class="nav-btn flex flex-col items-center justify-center w-12 py-1 text-purple-400 transition">
+      <i class="fa-solid fa-mask text-base"></i>
+      <span class="text-[9px] font-medium mt-0.5">Secrets</span>
+    </button>
+    <button onclick="switchTab('profile')" id="nav-profile" class="nav-btn flex flex-col items-center justify-center w-12 py-1 text-purple-400 transition">
+      <i class="fa-solid fa-user text-base"></i>
+      <span class="text-[9px] font-medium mt-0.5">Profile</span>
+    </button>
+  </nav>
+
+  <!-- MODAL: EDIT PROFILE -->
+  <div id="edit-profile-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl w-full max-w-xs p-4 border border-purple-700/60 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white">Edit Profile Persona</h3>
+        <button onclick="closeModal('edit-profile-modal')" class="text-purple-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-2">
+        <div>
+          <label class="text-[10px] uppercase text-purple-300">Username Persona</label>
+          <input type="text" id="input-edit-username" value="Princess_Guest" class="w-full bg-midnight border border-purple-800 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="text-[10px] uppercase text-purple-300">Bio / Tagline</label>
+          <input type="text" id="input-edit-bio" value="Vibing in my own aesthetic realm ✨" class="w-full bg-midnight border border-purple-800 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+        </div>
+        <div>
+          <label class="text-[10px] uppercase text-purple-300">Avatar Style</label>
+          <select id="input-edit-avatar" class="w-full bg-midnight border border-purple-800 rounded-lg p-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+            <option value="PrincessUser">Neon Bot Princess</option>
+            <option value="AestheticQueen">Aesthetic Queen</option>
+            <option value="MidnightMystic">Midnight Mystic</option>
+            <option value="StarGazer">Star Gazer</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="saveProfile()" class="w-full py-2 rounded-xl neon-btn text-xs font-bold text-white">
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: REPORT CONTENT -->
+  <div id="report-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl w-full max-w-xs p-4 border border-pink-500/40 space-y-3">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-pink-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-triangle-exclamation"></i> Report Content
+        </h3>
+        <button onclick="closeModal('report-modal')" class="text-purple-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs text-purple-200">Help keep WHISPR safe. Why are you reporting this post?</p>
+
+      <div class="space-y-1.5 text-xs">
+        <label class="flex items-center gap-2 p-2 rounded bg-purple-950/50 text-purple-200 cursor-pointer">
+          <input type="radio" name="report-reason" value="harassment" checked class="accent-pink-500"> Bullying or Harassment
+        </label>
+        <label class="flex items-center gap-2 p-2 rounded bg-purple-950/50 text-purple-200 cursor-pointer">
+          <input type="radio" name="report-reason" value="privacy" class="accent-pink-500"> Personal Info / Doxxing
+        </label>
+        <label class="flex items-center gap-2 p-2 rounded bg-purple-950/50 text-purple-200 cursor-pointer">
+          <input type="radio" name="report-reason" value="threats" class="accent-pink-500"> Harmful / Threatening
+        </label>
+        <label class="flex items-center gap-2 p-2 rounded bg-purple-950/50 text-purple-200 cursor-pointer">
+          <input type="radio" name="report-reason" value="spam" class="accent-pink-500"> Spam or Misleading
+        </label>
+      </div>
+
+      <button onclick="submitReport()" class="w-full py-2 rounded-xl bg-pink-600 hover:bg-pink-500 text-xs font-bold text-white shadow-lg">
+        Submit Report to Moderation
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: COMMUNITY GUIDELINES -->
+  <div id="guidelines-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl w-full max-w-xs p-4 border border-purple-700/60 space-y-3 max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <h3 class="text-sm font-bold text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-shield-cat text-pink-400"></i> Safety Guidelines
+        </h3>
+        <button onclick="closeModal('guidelines-modal')" class="text-purple-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-2 text-xs text-purple-200 leading-relaxed">
+        <p class="font-semibold text-pink-300">Welcome to WHISPR by Princess!</p>
+        <p>To keep our midnight space safe and welcoming for everyone, please follow these core rules:</p>
+        <ul class="list-disc pl-4 space-y-1 text-purple-300">
+          <li><strong>No Bullying or Harassment:</strong> Respect all members. Personal attacks are strictly prohibited.</li>
+          <li><strong>No Real Personal Info:</strong> Do not post phone numbers, addresses, full real names, or private social handles.</li>
+          <li><strong>Zero Tolerance for Threats:</strong> Any form of violent threats or self-harm encouragement will be removed immediately.</li>
+          <li><strong>Anonymous Moderation:</strong> All confessions pass through automated checks prior to display.</li>
+        </ul>
+      </div>
+
+      <button onclick="closeModal('guidelines-modal')" class="w-full py-2 rounded-xl neon-btn text-xs font-bold text-white">
+        I Understand & Agree
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: COMMENTS SHEET -->
+  <div id="comments-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-end justify-center">
+    <div class="glass-card rounded-t-2xl w-full max-w-md p-4 border-t border-purple-600/50 space-y-3 max-h-[75vh] flex flex-col">
+      <div class="flex items-center justify-between pb-2 border-b border-purple-800/50">
+        <h3 class="text-xs font-bold text-purple-100 flex items-center gap-1.5">
+          <i class="fa-regular fa-comments text-pink-400"></i> Discussion & Replies
+        </h3>
+        <button onclick="closeModal('comments-modal')" class="text-purple-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <!-- Comments Feed List -->
+      <div id="comments-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1 my-2"></div>
+
+      <!-- Reply Input -->
+      <form onsubmit="postComment(event)" class="flex items-center gap-2 pt-2 border-t border-purple-900/50">
+        <input type="text" id="comment-input" required placeholder="Add a polite reply..." class="flex-1 bg-midnight border border-purple-800 rounded-xl px-3 py-2 text-xs text-purple-100 focus:outline-none focus:border-pink-500">
+        <button type="submit" class="px-3 py-2 rounded-xl neon-btn text-xs font-bold text-white">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION POPUP -->
+  <div id="toast-msg" class="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-purple-900 to-pink-900 border border-pink-400/50 text-white text-xs px-4 py-2 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-2">
+    Action Successful!
+  </div>
+
+  <!-- CLIENT DEMO STATE BANNER (EXPLANATORY NOTICE) -->
+  <div class="px-4 py-3 mt-6 mb-2 rounded-xl bg-purple-950/40 border border-purple-800/40 text-[10px] text-purple-300/80 leading-normal">
+    <p class="font-bold text-pink-300 mb-0.5">ℹ️ Frontend Mobile Demo Mode</p>
+    This app runs in your browser using local storage demo state. For full multi-user production deployment, connect a backend database service like <strong>Firebase Realtime DB / Supabase</strong> and Node.js WebSocket API.
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    /* ==================== INITIAL SAMPLE DATA ==================== */
+    let currentUser = {
+      username: "Princess_Guest",
+      bio: "Vibing in my own aesthetic realm ✨",
+      avatarSeed: "PrincessUser",
+      likesGiven: 12,
+      votesCast: 4
+    };
+
+    let activeCreateType = 'text'; // 'text' or 'poll'
+    let currentActivePostIdForComments = null;
+
+    let samplePosts = [
+      {
+        id: 'post-1',
+        author: 'AestheticGirl99',
+        avatarSeed: 'AestheticGirl99',
+        time: '10m ago',
+        content: 'Is it just me or does studying at 2 AM feel 10x more productive than 2 PM? 🌙✨ #LateNightThoughts',
+        likes: 24,
+        isLiked: false,
+        comments: [
+          { author: 'MidnightOwl', text: 'Literally reading this at 2:15 AM 😂' },
+          { author: 'Princess_Guest', text: 'Totally agree, the quiet vibes are elite!' }
+        ],
+        tag: 'LateNightThoughts'
+      },
+      {
+        id: 'post-2',
+        author: 'CampusWhisperer',
+        avatarSeed: 'CampusWhisperer',
+        time: '1h ago',
+        content: 'Unpopular opinion: The library 3rd floor lounge is actually the best chill spot on campus. Change my mind! ☕',
+        likes: 18,
+        isLiked: false,
+        comments: [
+          { author: 'CoffeeLover', text: 'Shhh don\'t tell everyone, it will get crowded!' }
+        ],
+        tag: 'CampusSecrets'
+      }
+    ];
+
+    let samplePolls = [
+      {
+        id: 'poll-1',
+        author: 'Princess',
+        avatarSeed: 'PrincessUser',
+        question: 'Which WHISPR theme color option do you love the most?',
+        options: [
+          { id: 0, text: 'Midnight Neon Purple 💜', votes: 42 },
+          { id: 1, text: 'Soft Lavender & Pink ✨', votes: 28 },
+          { id: 2, text: 'Deep Cyber Black 🖤', votes: 15 }
+        ],
+        totalVotes: 85,
+        userVotedOption: null
+      },
+      {
+        id: 'poll-2',
+        author: 'NightVibes',
+        avatarSeed: 'NightVibes',
+        question: 'What is your go-to late night comfort food?',
+        options: [
+          { id: 0, text: 'Spicy Instant Ramen 🍜', votes: 64 },
+          { id: 1, text: 'Midnight Pizza Slice 🍕', votes: 38 },
+          { id: 2, text: 'Sweet Ice Cream Cup 🍦', votes: 21 }
+        ],
+        totalVotes: 123,
+        userVotedOption: null
+      }
+    ];
+
+    let sampleConfessions = [
+      {
+        id: 'confess-1',
+        time: '30m ago',
+        text: 'I secretly leave cute motivational sticky notes in random library books so people smile when they open them.',
+        likes: 45,
+        isLiked: false
+      },
+      {
+        id: 'confess-2',
+        time: '2h ago',
+        text: 'I pretended to forget my umbrella just so I could share one with my crush in the rain. Best decision ever!',
+        likes: 89,
+        isLiked: false
+      }
+    ];
+
+    let sampleNotifications = [
+      { id: 1, text: 'AestheticGirl99 liked your comment.', time: '5m ago', read: false },
+      { id: 2, text: 'Your confession was approved by moderation.', time: '1h ago', read: false },
+      { id: 3, text: 'Princess created a new daily poll.', time: '3h ago', read: false }
+    ];
+
+    /* ==================== APP INITIALIZATION ==================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderHomeFeed();
+      renderPollsView();
+      renderConfessionsFeed();
+      renderNotifications();
+      renderUserActivity();
+    });
+
+    /* ==================== TAB NAVIGATION LOGIC ==================== */
+    function switchTab(tabName) {
+      // Hide all panels
+      const panels = document.querySelectorAll('.view-panel');
+      panels.forEach(p => p.classList.add('hidden'));
+
+      // Deactivate all nav buttons
+      const navBtns = document.querySelectorAll('.nav-btn');
+      navBtns.forEach(btn => btn.classList.remove('tab-active'));
+
+      // Show target panel
+      const targetPanel = document.getElementById(`view-${tabName}`);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+
+      // Highlight active nav button
+      const activeNav = document.getElementById(`nav-${tabName}`);
+      if (activeNav) {
+        activeNav.classList.add('tab-active');
+      }
+
+      // Dynamic view re-renders if required
+      if (tabName === 'trending') {
+        renderExploreFeed();
+      }
+    }
+
+    /* ==================== HOME FEED RENDER ==================== */
+    function renderHomeFeed(filterKeyword = '') {
+      const container = document.getElementById('home-feed-container');
+      const countLabel = document.getElementById('feed-count');
+      const featuredPollDiv = document.getElementById('home-featured-poll');
+      container.innerHTML = '';
+
+      // Featured Poll Card on Home
+      if (samplePolls.length > 0 && !filterKeyword) {
+        const topPoll = samplePolls[0];
+        featuredPollDiv.innerHTML = `
+          <div class="glass-card rounded-2xl p-3.5 border border-purple-600/40">
+            <div class="flex items-center gap-1.5 text-[10px] text-pink-400 font-bold uppercase tracking-wider mb-1">
+              <i class="fa-solid fa-star"></i> Featured Daily Poll
+            </div>
+            <p class="text-xs font-bold text-white mb-2.5">${topPoll.question}</p>
+            <div class="space-y-1.5">
+              ${renderPollOptionsHTML(topPoll)}
+            </div>
+          </div>
+        `;
+      } else {
+        featuredPollDiv.innerHTML = '';
+      }
+
+      // Filter Posts
+      let filtered = samplePosts;
+      if (filterKeyword) {
+        const query = filterKeyword.toLowerCase().replace('#', '');
+        filtered = samplePosts.filter(p => 
+          p.content.toLowerCase().includes(query) || 
+          (p.tag && p.tag.toLowerCase().includes(query))
+        );
+      }
+
+      countLabel.textContent = `${filtered.length} Whisprs`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-purple-400">No whispers found matching your search.</div>`;
+        return;
+      }
+
+      filtered.forEach(post => {
+        const postCard = document.createElement('div');
+        postCard.className = 'glass-card rounded-2xl p-3.5 space-y-2.5 transition hover:border-purple-600/60';
+        postCard.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${post.avatarSeed}" class="w-7 h-7 rounded-full border border-pink-400/60" alt="Avatar">
+              <div>
+                <p class="text-xs font-bold text-purple-100">${post.author}</p>
+                <p class="text-[9px] text-purple-400">${post.time}</p>
+              </div>
+            </div>
+            <button onclick="openReportModal('${post.id}')" class="text-purple-400 hover:text-pink-400 text-xs p-1">
+              <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+          </div>
+
+          <p class="text-xs text-purple-100 leading-relaxed">${post.content}</p>
+
+          <div class="flex items-center justify-between pt-1 border-t border-purple-900/40 text-xs">
+            <div class="flex items-center gap-4">
+              <button onclick="toggleLikePost('${post.id}')" class="flex items-center gap-1.5 ${post.isLiked ? 'text-pink-400 font-bold' : 'text-purple-300 hover:text-pink-400'} transition">
+                <i class="${post.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                <span>${post.likes}</span>
+              </button>
+              <button onclick="openCommentsModal('${post.id}')" class="flex items-center gap-1.5 text-purple-300 hover:text-lavender transition">
+                <i class="fa-regular fa-comment"></i>
+                <span>${post.comments.length}</span>
+              </button>
+            </div>
+            <span class="text-[10px] text-pink-300 bg-pink-500/10 border border-pink-500/20 px-2 py-0.5 rounded-full">#${post.tag || 'Community'}</span>
+          </div>
+        `;
+        container.appendChild(postCard);
+      });
+    }
+
+    /* ==================== POLLS LOGIC & RENDER ==================== */
+    function renderPollsView() {
+      const container = document.getElementById('polls-list-container');
+      container.innerHTML = '';
+
+      samplePolls.forEach(poll => {
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-4 space-y-3';
+        card.innerHTML = `
+          <div class="flex items-center gap-2">
+            <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${poll.avatarSeed}" class="w-7 h-7 rounded-full border border-pink-400/60" alt="Avatar">
+            <div>
+              <p class="text-xs font-bold text-purple-100">${poll.author}</p>
+              <p class="text-[9px] text-purple-400">${poll.totalVotes} total votes</p>
+            </div>
+          </div>
+          <p class="text-xs font-bold text-white">${poll.question}</p>
+          <div class="space-y-2">
+            ${renderPollOptionsHTML(poll)}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderPollOptionsHTML(poll) {
+      const hasVoted = poll.userVotedOption !== null;
+
+      return poll.options.map(opt => {
+        const percentage = poll.totalVotes > 0 ? Math.round((opt.votes / poll.totalVotes) * 100) : 0;
+        const isSelected = poll.userVotedOption === opt.id;
+
+        if (hasVoted) {
+          // Display Animated Percentage Bar
+          return `
+            <div class="relative overflow-hidden rounded-xl bg-purple-950/80 border ${isSelected ? 'border-pink-500 bg-purple-900/50' : 'border-purple-800/60'} p-2.5">
+              <div class="poll-bar-fill absolute top-0 left-0 bottom-0 ${isSelected ? 'bg-gradient-to-r from-neonPurple/50 to-pink-500/50' : 'bg-purple-800/40'}" style="width: ${percentage}%"></div>
+              <div class="relative flex items-center justify-between text-xs">
+                <span class="font-medium text-purple-100 flex items-center gap-1.5">
+                  ${opt.text} ${isSelected ? '<i class="fa-solid fa-circle-check text-pink-400"></i>' : ''}
+                </span>
+                <span class="font-bold text-pink-300">${percentage}%</span>
+              </div>
+            </div>
+          `;
+        } else {
+          // Display Interactive Voting Buttons
+          return `
+            <button onclick="votePoll('${poll.id}', ${opt.id})" class="w-full text-left p-2.5 rounded-xl bg-purple-950/60 hover:bg-purple-900/60 border border-purple-800/60 text-xs text-purple-100 hover:border-pink-400 transition flex items-center justify-between">
+              <span>${opt.text}</span>
+              <i class="fa-regular fa-circle text-purple-500"></i>
+            </button>
+          `;
+        }
+      }).join('');
+    }
+
+    function votePoll(pollId, optionId) {
+      const poll = samplePolls.find(p => p.id === pollId);
+      if (poll && poll.userVotedOption === null) {
+        poll.userVotedOption = optionId;
+        poll.options[optionId].votes += 1;
+        poll.totalVotes += 1;
+        currentUser.votesCast += 1;
+        
+        document.getElementById('stat-votes-count').textContent = currentUser.votesCast;
+        showToast('Vote submitted anonymously!');
+        renderPollsView();
+        renderHomeFeed();
+      }
+    }
+
+    /* ==================== CONFESSIONS LOGIC ==================== */
+    function submitConfession(event) {
+      event.preventDefault();
+      const textarea = document.getElementById('confession-text');
+      const text = textarea.value.trim();
+
+      if (!text) return;
+
+      // Basic client safety keyword check demo
+      const forbiddenTerms = ['phone', 'call me at', 'address', 'hate', 'kill'];
+      const containsViolation = forbiddenTerms.some(term => text.toLowerCase().includes(term));
+
+      if (containsViolation) {
+        showToast('Submission blocked: Avoid personal contact info or prohibited words.');
+        return;
+      }
+
+      // Show Pending Toast
+      const toast = document.getElementById('moderation-toast');
+      toast.classList.remove('hidden');
+
+      textarea.value = '';
+
+      // Simulated automated moderation approval delay
+      setTimeout(() => {
+        toast.classList.add('hidden');
+        sampleConfessions.unshift({
+          id: 'confess-' + Date.now(),
+          time: 'Just now',
+          text: text,
+          likes: 1,
+          isLiked: false
+        });
+        renderConfessionsFeed();
+        showToast('Your confession was approved & published anonymously!');
+      }, 3000);
+    }
+
+    function renderConfessionsFeed() {
+      const container = document.getElementById('confessions-feed');
+      container.innerHTML = '';
+
+      sampleConfessions.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-3.5 space-y-2 border border-purple-800/50';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] text-pink-400 font-semibold bg-pink-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+              <i class="fa-solid fa-user-secret"></i> Anonymous Whispr
+            </span>
+            <span class="text-[9px] text-purple-400">${item.time}</span>
+          </div>
+          <p class="text-xs text-purple-100 italic leading-relaxed">"${item.text}"</p>
+          <div class="flex items-center justify-between pt-1 border-t border-purple-900/40">
+            <button onclick="toggleLikeConfession('${item.id}')" class="text-xs ${item.isLiked ? 'text-pink-400 font-bold' : 'text-purple-300'} flex items-center gap-1">
+              <i class="${item.isLiked ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+              <span>${item.likes}</span>
+            </button>
+            <button onclick="openReportModal('${item.id}')" class="text-[10px] text-purple-400 hover:text-pink-300">
+              <i class="fa-solid fa-flag"></i> Report
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleLikeConfession(id) {
+      const item = sampleConfessions.find(c => c.id === id);
+      if (item) {
+        item.isLiked = !item.isLiked;
+        item.likes += item.isLiked ? 1 : -1;
+        renderConfessionsFeed();
+      }
+    }
+
+    /* ==================== CREATE POST LOGIC ==================== */
+    function setCreateType(type) {
+      activeCreateType = type;
+      const btnText = document.getElementById('tab-btn-text');
+      const btnPoll = document.getElementById('tab-btn-poll');
+      const pollFields = document.getElementById('poll-fields');
+
+      if (type === 'text') {
+        btnText.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-neonPurple text-white transition';
+        btnPoll.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-purple-300 hover:text-white transition';
+        pollFields.classList.add('hidden');
+      } else {
+        btnPoll.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg bg-neonPurple text-white transition';
+        btnText.className = 'flex-1 py-1.5 text-xs font-bold rounded-lg text-purple-300 hover:text-white transition';
+        pollFields.classList.remove('hidden');
+      }
+    }
+
+    function insertEmoji(emoji) {
+      const textarea = document.getElementById('create-content');
+      textarea.value += emoji;
+      textarea.focus();
+    }
+
+    function handleCreatePost(event) {
+      event.preventDefault();
+      const content = document.getElementById('create-content').value.trim();
+
+      if (!content) return;
+
+      if (activeCreateType === 'text') {
+        const newPost = {
+          id: 'post-' + Date.now(),
+          author: currentUser.username,
+          avatarSeed: currentUser.avatarSeed,
+          time: 'Just now',
+          content: content,
+          likes: 0,
+          isLiked: false,
+          comments: [],
+          tag: 'General'
+        };
+        samplePosts.unshift(newPost);
+        showToast('Your Whispr post was published!');
+      } else {
+        const opt1 = document.getElementById('poll-opt-1').value.trim() || 'Yes';
+        const opt2 = document.getElementById('poll-opt-2').value.trim() || 'No';
+        const opt3 = document.getElementById('poll-opt-3').value.trim();
+
+        const options = [
+          { id: 0, text: opt1, votes: 0 },
+          { id: 1, text: opt2, votes: 0 }
+        ];
+
+        if (opt3) options.push({ id: 2, text: opt3, votes: 0 });
+
+        const newPoll = {
+          id: 'poll-' + Date.now(),
+          author: currentUser.username,
+          avatarSeed: currentUser.avatarSeed,
+          question: content,
+          options: options,
+          totalVotes: 0,
+          userVotedOption: null
+        };
+        samplePolls.unshift(newPoll);
+        showToast('Your new community poll is live!');
+      }
+
+      // Reset form & Switch to Home
+      document.getElementById('create-content').value = '';
+      document.getElementById('poll-opt-1').value = '';
+      document.getElementById('poll-opt-2').value = '';
+      document.getElementById('poll-opt-3').value = '';
+      
+      renderHomeFeed();
+      renderPollsView();
+      renderUserActivity();
+      switchTab('home');
+    }
+
+    /* ==================== SEARCH & EXPLORE ==================== */
+    function handleSearch() {
+      const query = document.getElementById('global-search').value.trim();
+      renderHomeFeed(query);
+    }
+
+    function filterByTag(tag) {
+      document.getElementById('global-search').value = '#' + tag;
+      switchTab('home');
+      renderHomeFeed(tag);
+    }
+
+    function renderExploreFeed() {
+      const container = document.getElementById('explore-feed-container');
+      container.innerHTML = '';
+
+      samplePosts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'glass-card rounded-2xl p-3 text-xs space-y-1.5';
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-purple-300">
+            <span class="font-bold">${post.author}</span>
+            <span class="text-[10px] text-pink-300">#${post.tag}</span>
+          </div>
+          <p class="text-purple-100">${post.content}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    /* ==================== LIKE & COMMENTS LOGIC ==================== */
+    function toggleLikePost(postId) {
+      const post = samplePosts.find(p => p.id === postId);
+      if (post) {
+        post.isLiked = !post.isLiked;
+        post.likes += post.isLiked ? 1 : -1;
+        if (post.isLiked) currentUser.likesGiven += 1;
+        
+        document.getElementById('stat-likes-count').textContent = currentUser.likesGiven;
+        renderHomeFeed();
+      }
+    }
+
+    function openCommentsModal(postId) {
+      currentActivePostIdForComments = postId;
+      renderCommentsList();
+      openModal('comments-modal');
+    }
+
+    function renderCommentsList() {
+      const post = samplePosts.find(p => p.id === currentActivePostIdForComments);
+      const container = document.getElementById('comments-list');
+      container.innerHTML = '';
+
+      if (!post || post.comments.length === 0) {
+        container.innerHTML = `<div class="text-center py-4 text-xs text-purple-400">No replies yet. Be the first to reply!</div>`;
+        return;
+      }
+
+      post.comments.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'p-2 rounded-xl bg-purple-950/60 border border-purple-800/40 text-xs space-y-0.5';
+        div.innerHTML = `
+          <span class="font-bold text-pink-300">${c.author}</span>
+          <p class="text-purple-100">${c.text}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function postComment(event) {
+      event.preventDefault();
+      const input = document.getElementById('comment-input');
+      const text = input.value.trim();
+
+      if (!text || !currentActivePostIdForComments) return;
+
+      const post = samplePosts.find(p => p.id === currentActivePostIdForComments);
+      if (post) {
+        post.comments.push({
+          author: currentUser.username,
+          text: text
+        });
+        input.value = '';
+        renderCommentsList();
+        renderHomeFeed();
+        showToast('Reply posted!');
+      }
+    }
+
+    /* ==================== USER PROFILE MANAGEMENT ==================== */
+    function saveProfile() {
+      const newName = document.getElementById('input-edit-username').value.trim();
+      const newBio = document.getElementById('input-edit-bio').value.trim();
+      const newAvatar = document.getElementById('input-edit-avatar').value;
+
+      if (newName) currentUser.username = newName;
+      if (newBio) currentUser.bio = newBio;
+      if (newAvatar) currentUser.avatarSeed = newAvatar;
+
+      // Update UI elements
+      document.getElementById('profile-name-display').textContent = currentUser.username;
+      document.getElementById('profile-bio-display').textContent = currentUser.bio;
+      document.getElementById('profile-avatar-display').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.avatarSeed}`;
+      
+      document.getElementById('create-username-preview').textContent = currentUser.username;
+      document.getElementById('create-avatar-preview').src = `https://api.dicebear.com/7.x/bottts/svg?seed=${currentUser.avatarSeed}`;
+
+      closeModal('edit-profile-modal');
+      showToast('Profile persona updated!');
+    }
+
+    function renderUserActivity() {
+      const container = document.getElementById('user-activity-container');
+      container.innerHTML = '';
+
+      const myPosts = samplePosts.filter(p => p.author === currentUser.username);
+      document.getElementById('stat-posts-count').textContent = myPosts.length;
+
+      if (myPosts.length === 0) {
+        container.innerHTML = `<div class="text-center py-4 text-xs text-purple-400">You haven't published any Whisprs yet.</div>`;
+        return;
+      }
+
+      myPosts.forEach(post => {
+        const div = document.createElement('div');
+        div.className = 'glass-card rounded-xl p-3 text-xs space-y-1';
+        div.innerHTML = `
+          <p class="font-bold text-white">${post.content}</p>
+          <div class="flex items-center justify-between text-[10px] text-purple-400">
+            <span>${post.time}</span>
+            <span class="text-pink-400">${post.likes} Likes</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    /* ==================== NOTIFICATIONS LOGIC ==================== */
+    function renderNotifications() {
+      const container = document.getElementById('notif-list-container');
+      container.innerHTML = '';
+
+      sampleNotifications.forEach(n => {
+        const div = document.createElement('div');
+        div.className = `glass-card rounded-xl p-3 text-xs flex items-start gap-2.5 ${n.read ? 'opacity-70' : 'border-l-2 border-l-pink-400'}`;
+        div.innerHTML = `
+          <i class="fa-solid fa-bell text-pink-400 mt-0.5"></i>
+          <div class="flex-1">
+            <p class="text-purple-100">${n.text}</p>
+            <span class="text-[9px] text-purple-400">${n.time}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function clearNotifications() {
+      sampleNotifications.forEach(n => n.read = true);
+      document.getElementById('notif-badge').style.display = 'none';
+      renderNotifications();
+      showToast('All notifications marked as read.');
+    }
+
+    /* ==================== MODALS & REPORTING ==================== */
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.add('hidden');
+    }
+
+    function openReportModal(contentId) {
+      openModal('report-modal');
+    }
+
+    function submitReport() {
+      closeModal('report-modal');
+      showToast('Report submitted. Thank you for keeping WHISPR safe!');
+    }
+
+    /* ==================== TOAST HELPER ==================== */
+    function showToast(message) {
+      const toast = document.getElementById('toast-msg');
+      toast.textContent = message;
+      toast.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
+      }, 2500);
+    }
+  </script>
+</body>
+</html>
